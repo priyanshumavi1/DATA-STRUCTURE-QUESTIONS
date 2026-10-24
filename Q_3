@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Insertion
+void insertAtBeg(struct Node** head, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = *head;
+    *head = newNode;
+}
+
+void insertAtEnd(struct Node** head, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    if (*head == NULL) { *head = newNode; return; }
+    struct Node* temp = *head;
+    while (temp->next != NULL) temp = temp->next;
+    temp->next = newNode;
+}
+
+// Deletion
+void deleteFromBeg(struct Node** head) {
+    if (*head == NULL) return;
+    struct Node* temp = *head;
+    *head = (*head)->next;
+    free(temp);
+}
+
+void printList(struct Node* node) {
+    while (node != NULL) {
+        printf("%d -> ", node->data);
+        node = node->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* head = NULL;
+    insertAtBeg(&head, 10);
+    insertAtEnd(&head, 20);
+    insertAtEnd(&head, 30);
+    printf("List after insertions: "); printList(head);
+    
+    deleteFromBeg(&head);
+    printf("List after deleting from beginning: "); printList(head);
+    return 0;
+}
