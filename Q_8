@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+
+#define MAX 100
+char stack[MAX];
+int top = -1;
+
+void push(char c) { stack[++top] = c; }
+char pop() { return stack[top--]; }
+
+bool isValid(char* s) {
+    top = -1; // reset stack
+    for (int i = 0; i < strlen(s); i++) {
+        if (s[i] == '(' || s[i] == '{' || s[i] == '[') push(s[i]);
+        else {
+            if (top == -1) return false;
+            char c = pop();
+            if ((s[i] == ')' && c != '(') || 
+                (s[i] == '}' && c != '{') || 
+                (s[i] == ']' && c != '[')) return false;
+        }
+    }
+    return top == -1;
+}
+
+int main() {
+    char expr[] = "{[()]}";
+    if (isValid(expr)) printf("Expression is Valid\n");
+    else printf("Expression is Invalid\n");
+    return 0;
+}
