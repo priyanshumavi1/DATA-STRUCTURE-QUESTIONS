@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int coeff;
+    int pow;
+    struct Node* next;
+};
+
+void createNode(int c, int p, struct Node** temp) {
+    struct Node* r = (struct Node*)malloc(sizeof(struct Node));
+    r->coeff = c; r->pow = p; r->next = NULL;
+    if (*temp == NULL) *temp = r;
+    else {
+        r->next = *temp;
+        *temp = r;
+    }
+}
+
+void addPolynomials(struct Node* p1, struct Node* p2, struct Node** result) {
+    while (p1 != NULL && p2 != NULL) {
+        if (p1->pow > p2->pow) {
+            createNode(p1->coeff, p1->pow, result); p1 = p1->next;
+        } else if (p1->pow < p2->pow) {
+            createNode(p2->coeff, p2->pow, result); p2 = p2->next;
+        } else {
+            createNode(p1->coeff + p2->coeff, p1->pow, result);
+            p1 = p1->next; p2 = p2->next;
+        }
+    }
+}
+
+int main() {
+    struct Node *poly1 = NULL, *poly2 = NULL, *result = NULL;
+    createNode(5, 2, &poly1); createNode(4, 1, &poly1); // 4x + 5x^2
+    createNode(3, 2, &poly2); createNode(2, 1, &poly2); // 2x + 3x^2
+    
+    addPolynomials(poly1, poly2, &result);
+    printf("Polynomial added successfully.\n");
+    return 0;
+}
